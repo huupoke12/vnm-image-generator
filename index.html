@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>VNM Text Generator</title>
+
+    <link href="res/style/bootstrap.min.css" rel="stylesheet">
+    <link href="index.css" rel="stylesheet">
+    <script src="index.js"></script>
+</head>
+
+<body class="container" onload="draw()">
+    <div class="row mt-4">
+        <div class="col">
+            <form oninput="draw()">
+                <div class="mb-3 form-floating">
+                    <input id="display-text" class="form-control" placeholder="Display text">
+                    <label for="display-text">Display text</label>
+                </div>
+                <div class="mb-3 form-floating">
+                    <input id="sub-left-text" class="form-control" placeholder="Sub-left text">
+                    <label for="sub-left-text">Sub-left text</label>
+                </div>
+                <div class="mb-3 form-floating">
+                    <input id="sub-right-text" class="form-control" placeholder="Sub-right text">
+                    <label for="sub-right-text">Sub-right text</label>
+                </div>
+                <div class="mb-3 form-floating">
+                    <select class="form-select" id="font-selector">
+                        <option selected value="VNM Sans Display">VNM Sans Display (Bold)</option>
+                        <option value="VNM Sans Std">VNM Sans Std</option>
+                    </select>
+                    <label for="font-selector">Font</label>
+                </div>
+            </form>
+            <a class="btn btn-primary" id="download-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                    <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                  </svg>
+                Download
+            </a>
+            <hr>
+        </div>
+        <div class="col">
+            <h3>Preview</h3>
+            <p><small>If you feel it's not aligned, recheck if there aren't any unnecessary spaces.</small></p>
+            <canvas id="canvas" width="512" height="512">
+            </canvas>
+        </div>
+    </div>
+
+</body>
+
+</html>

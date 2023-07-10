@@ -1,0 +1,10 @@
+@font-face {
+    font-family: "VNM Sans Display";
+    src: url("res/font/VNMSansDisplay-Bold.woff2");
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: "VNM Sans Std";
+    src: url("res/font/VNMSansStd-Regular.woff2");
+}

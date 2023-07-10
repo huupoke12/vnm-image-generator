@@ -1,6 +1,10 @@
 const vnmWhite = "#fffff1";
 const vnmBlue = "#0213b0";
 
+const canvasAspectRatio = 1;
+const canvasPreviewScale = 0.5;
+const canvasWidth = 1024;
+
 function getAtLeast(value, limit) {
     return (value > limit) ? value : limit;
 }
@@ -14,6 +18,8 @@ function draw() {
     const font = document.getElementById("font-selector").value;
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     ctx.fillStyle = vnmBlue;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -63,3 +69,14 @@ function draw() {
     downloadButton.download = `vnm-${displayText.text}-${subLeftText.text}-${subRightText.text}`;
     downloadButton.href = canvas.toDataURL();
 }
+
+function main() {
+    const canvas = document.getElementById("canvas");
+    canvas.width = canvasWidth;
+    canvas.height = canvas.width / canvasAspectRatio;
+    canvas.style.width = `${canvas.width * canvasPreviewScale}px`;
+    canvas.style.height = `${canvas.height * canvasPreviewScale}px`;
+    draw();
+}
+
+window.onload = main;

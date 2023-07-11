@@ -1,9 +1,17 @@
+"use strict";
+
+const precision = 0.001;
+
 const vnmWhite = "#fffff1";
 const vnmBlue = "#0213b0";
 
 const canvasAspectRatio = 1;
 const canvasPreviewScale = 0.5;
 const canvasWidth = 1024;
+
+function floatEqual(value1, value2) {
+    return Math.abs(value1 - value2) < precision;
+}
 
 function getAtLeast(value, limit) {
     return (value > limit) ? value : limit;
@@ -23,47 +31,73 @@ function draw() {
 
     ctx.fillStyle = vnmBlue;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = vnmWhite;
 
     const displayText = {
         "text": document.getElementById("display-text").value,
         "x": canvas.width / 2,
-        "y": canvas.height / 2,
+        "y": undefined,
         "size": canvas.width / 5,
     };
 
     ctx.font = `${displayText.size}px ${font}`;
-
     const displayTextMetrics = ctx.measureText(displayText.text);
+    const displayTextHeight = displayTextMetrics.actualBoundingBoxAscent + displayTextMetrics.actualBoundingBoxDescent;
+
+    const spacingToDisplayText = displayText.size / 8;
+
     const subLeftText = {
         "text": document.getElementById("sub-left-text").value,
         "x": getAtLeast(
-            value = displayText.x - displayTextMetrics.width / 2,
-            limit = 0.1 * canvas.width
+            displayText.x - displayTextMetrics.width / 2,
+            0.1 * canvas.width
         ),
-        "y": displayText.y + displayText.size / 2,
-        "size": displayText.size / 3,
+        "y": undefined,
+        "size": displayText.size / 4,
     };
     const subRightText = {
         "text": document.getElementById("sub-right-text").value,
         "x": getAtMost(
-            value = displayText.x + displayTextMetrics.width / 2,
-            limit = 0.9 * canvas.width
+            displayText.x + displayTextMetrics.width / 2,
+            0.9 * canvas.width
         ),
-        "y": subLeftText.y,
+        "y": undefined,
         "size": subLeftText.size,
     };
 
+    ctx.font = `${subLeftText.size}px ${font}`;
+    const subLeftTextMetrics = ctx.measureText(subLeftText.text);
+    const subRightTextMetrics = ctx.measureText(subRightText.text);
+    const subTextHeight = Math.max(
+        subLeftTextMetrics.actualBoundingBoxAscent + subLeftTextMetrics.actualBoundingBoxDescent,
+        subRightTextMetrics.actualBoundingBoxAscent + subRightTextMetrics.actualBoundingBoxDescent,
+    );
 
-    ctx.fillStyle = vnmWhite;
+    const totalTextHeight = floatEqual(subTextHeight, 0) ?
+        displayTextHeight :
+        displayTextHeight + spacingToDisplayText + subTextHeight;
+
+
+    displayText.y = (canvas.height - totalTextHeight) / 2;
+    subLeftText.y = displayText.y + displayTextHeight + spacingToDisplayText;
+    subRightText.y = subLeftText.y;
+
+
+    ctx.textBaseline = "top";
     ctx.textAlign = "center";
-    ctx.fillText(displayText.text, displayText.x, displayText.y, 0.8 * canvas.width);
+    ctx.font = `${displayText.size}px ${font}`;
+    ctx.fillText(displayText.text, displayText.x,
+        displayText.y + displayTextMetrics.actualBoundingBoxAscent,
+        0.8 * canvas.width);
 
     ctx.textAlign = "start";
     ctx.font = `${subLeftText.size}px ${font}`;
-    ctx.fillText(subLeftText.text, subLeftText.x, subLeftText.y);
+    ctx.fillText(subLeftText.text, subLeftText.x,
+        subLeftText.y + subLeftTextMetrics.actualBoundingBoxAscent);
 
     ctx.textAlign = "end";
-    ctx.fillText(subRightText.text, subRightText.x, subRightText.y);
+    ctx.fillText(subRightText.text, subRightText.x,
+        subRightText.y + subLeftTextMetrics.actualBoundingBoxAscent);
 
     const downloadButton = document.getElementById("download-button");
     downloadButton.download = `vnm-${displayText.text}-${subLeftText.text}-${subRightText.text}`;

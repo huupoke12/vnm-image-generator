@@ -82,6 +82,11 @@ function draw() {
     subLeftText.y = displayText.y + displayTextHeight + spacingToDisplayText;
     subRightText.y = subLeftText.y;
 
+    const subTextAlign = Math.max(
+        subLeftTextMetrics.actualBoundingBoxAscent,
+        subRightTextMetrics.actualBoundingBoxAscent,
+    );
+
 
     ctx.textBaseline = "top";
     ctx.textAlign = "center";
@@ -93,11 +98,11 @@ function draw() {
     ctx.textAlign = "start";
     ctx.font = `${subLeftText.size}px ${font}`;
     ctx.fillText(subLeftText.text, subLeftText.x,
-        subLeftText.y + subLeftTextMetrics.actualBoundingBoxAscent);
+        subLeftText.y + subTextAlign);
 
     ctx.textAlign = "end";
     ctx.fillText(subRightText.text, subRightText.x,
-        subRightText.y + subLeftTextMetrics.actualBoundingBoxAscent);
+        subRightText.y + subTextAlign);
 
     const downloadButton = document.getElementById("download-button");
     downloadButton.download = `vnm-${displayText.text}-${subLeftText.text}-${subRightText.text}`;
